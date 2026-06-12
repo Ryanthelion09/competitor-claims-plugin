@@ -13,7 +13,7 @@ Each run:
 ## Installation
 
 ```
-/plugin marketplace add Ryanthelion09/competitor-claims-plugin
+/plugin marketplace add https://github.com/Ryanthelion09/competitor-claims-plugin
 /plugin install competitor-claims@kai-tools
 ```
 
