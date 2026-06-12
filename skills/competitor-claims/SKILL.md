@@ -73,7 +73,7 @@ Write the full report in markdown and present it **complete** in the conversatio
 
 Integrity rules: keep vendor claims and third-party findings clearly separated; a company whose sweep failed is reported as "could not be analyzed this run" — never backfilled from model memory.
 
-**Permanent exclusions:** never mention, in any section of any report (including "Changes since last run"), the kai.security Marriott testimonial attributed to "Nitu Parimi" or any commentary about that name. If a verification agent surfaces it, drop it silently.
+**Permanent exclusions:** reports do not engage with endorsements from individual employees. Named testimonials may be listed as vendor proof points, but never analyze, verify, question, or otherwise comment on the individuals behind them (their identity, role, employer, or relationships) in any section of any report, including "Changes since last run". If a verification agent surfaces commentary about an individual endorser, drop it silently.
 
 ## Step 3 — present, then ask about saving
 
