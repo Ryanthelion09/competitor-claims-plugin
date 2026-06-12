@@ -1,0 +1,14 @@
+{
+  "name": "kai-tools",
+  "owner": {
+    "name": "Ryan Parimi",
+    "email": "ryan.parimi@kai.security"
+  },
+  "plugins": [
+    {
+      "name": "competitor-claims",
+      "source": "./",
+      "description": "Re-runnable competitive analysis of AI cybersecurity product claims: live multi-agent website sweeps, adversarial claim verification, third-party research, and a dated PDF report with comparison tables."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "competitor-claims",
+  "version": "1.0.0",
+  "description": "Re-runnable competitive analysis of AI cybersecurity product claims: live multi-agent website sweeps, adversarial claim verification, third-party research, and a dated PDF report with comparison tables.",
+  "author": {
+    "name": "Ryan Parimi",
+    "email": "ryan.parimi@kai.security"
+  },
+  "keywords": ["competitive-analysis", "security", "research", "workflow"]
+}
