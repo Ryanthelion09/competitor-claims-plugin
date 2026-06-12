@@ -45,17 +45,39 @@ while i < len(lines):
     line = lines[i]
     if line.startswith("|"):
         close_lists()
-        rows = []
+        raw = []
         while i < len(lines) and lines[i].startswith("|"):
-            rows.append(lines[i])
+            raw.append(lines[i])
             i += 1
-        body.append("<table>")
-        for r_idx, r in enumerate(rows):
+        parsed = []
+        for r in raw:
             if re.match(r"^\|[\s:|-]+\|$", r):
                 continue
-            cells = [c.strip() for c in r.strip().strip("|").split("|")]
-            tag = "th" if r_idx == 0 else "td"
-            body.append("<tr>" + "".join(f"<{tag}>{inline(c)}</{tag}>" for c in cells) + "</tr>")
+            parsed.append([c.strip() for c in r.strip().strip("|").split("|")])
+        body.append("<table>")
+        if parsed:
+            body.append("<tr>" + "".join(f"<th>{inline(c)}</th>" for c in parsed[0]) + "</tr>")
+        rows = parsed[1:]
+        # An empty first cell continues the group above: merge with rowspan so the
+        # group label renders as one cell with no internal borders.
+        span = [1] * len(rows)
+        for k, cells in enumerate(rows):
+            if cells and cells[0] != "":
+                n = 1
+                while k + n < len(rows) and rows[k + n] and rows[k + n][0] == "":
+                    n += 1
+                span[k] = n
+        for k, cells in enumerate(rows):
+            tds = []
+            for ci, c in enumerate(cells):
+                if ci == 0:
+                    if c == "":
+                        continue
+                    rs = f' rowspan="{span[k]}"' if span[k] > 1 else ""
+                    tds.append(f'<td class="group"{rs}>{inline(c)}</td>')
+                else:
+                    tds.append(f"<td>{inline(c)}</td>")
+            body.append("<tr>" + "".join(tds) + "</tr>")
         body.append("</table>")
         continue
     if line.startswith("### "):
@@ -104,9 +126,9 @@ table { border-collapse: collapse; width: 100%; font-size: 7.6px; line-height: 1
 th, td { border: 1px solid #b9c5dd; padding: 4px 5px; vertical-align: top; text-align: left; }
 th { background: #0f2557; color: #fff; }
 th strong, th em { color: inherit; }  /* keep bolded column titles visible on the dark header */
-tr td:first-child { font-weight: 700; background: #eef2fa; }
 tr:nth-child(even) td { background: #f7f9fd; }
-tr:nth-child(even) td:first-child { background: #e6ecf8; }
+td.group { font-weight: 700; background: #eef2fa; }
+tr:nth-child(even) td.group { background: #e6ecf8; }
 hr { border: none; border-top: 1px solid #c9d4ea; margin: 16px 0; }
 strong { color: #0f2557; }
 @media print { body { padding: 0; } h2, h3 { page-break-after: avoid; } table { page-break-inside: auto; } tr { page-break-inside: avoid; } }
