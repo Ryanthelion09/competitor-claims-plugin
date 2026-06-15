@@ -1,6 +1,6 @@
 # competitor-claims
 
-A Claude Code plugin that runs a fresh, comprehensive comparison of the product claims made by AI cybersecurity companies (Kai, Armadin, Astelia, Artemis, Cogent, Zafran) every time it's invoked — because marketing claims drift over time.
+A Claude Code plugin that runs a fresh, comprehensive comparison of the product claims made by AI cybersecurity companies (Kai, Armadin, Astelia, Artemis, Cogent, Vega, Zafran) every time it's invoked — because marketing claims drift over time.
 
 ## What it does
 
