@@ -1,6 +1,6 @@
 ---
 name: competitor-claims
-description: Run a fresh, comprehensive comparison of the product claims made by AI cybersecurity companies (Kai, Armadin, Astelia, Artemis, Cogent, Zafran) using their live websites and third-party sources. Produces a dated writeup with a comparison table and offers to save it as a PDF in the "Generated Analysis" subfolder. Use when the user asks to analyze, compare, or refresh competitor product claims.
+description: Run a fresh, comprehensive comparison of the product claims made by AI cybersecurity companies (Kai, Armadin, Astelia, Artemis, Cogent, Zafran, Vega) using their live websites and third-party sources. Produces a dated writeup with a comparison table and offers to save it as both a PDF and an HTML file in the "Generated Analysis" subfolder. Use when the user asks to analyze, compare, or refresh competitor product claims.
 ---
 
 # Competitor product-claims analysis
@@ -17,6 +17,7 @@ Compare what each company in the roster below promises customers, based on what 
 | Artemis | https://artemissecurity.com |
 | Cogent | https://cogent.com |
 | Zafran | https://zafran.io |
+| Vega | https://vega.io |
 
 To add or remove companies, edit this table — the workflow takes the roster as `args`. If the user passes extra companies or a focus area as skill arguments, add them to the roster / weave the focus into the synthesis.
 
@@ -42,7 +43,8 @@ Invoke the **Workflow** tool with `scriptPath` pointing at `claims-workflow.js` 
     {"name": "Astelia", "domain": "astelia.io"},
     {"name": "Artemis", "domain": "artemissecurity.com"},
     {"name": "Cogent", "domain": "cogent.com"},
-    {"name": "Zafran", "domain": "zafran.io"}
+    {"name": "Zafran", "domain": "zafran.io"},
+    {"name": "Vega", "domain": "vega.io"}
   ]
 }
 ```
@@ -77,13 +79,13 @@ Integrity rules: keep vendor claims and third-party findings clearly separated; 
 
 ## Step 3 — present, then ask about saving
 
-After presenting the writeup, use **AskUserQuestion** with a single question: "Save this writeup as a PDF in the Generated Analysis folder?" — options "Yes — save as PDF" (recommended) and "No — conversation only".
+After presenting the writeup, use **AskUserQuestion** with a single question: "Save this writeup to the Generated Analysis folder (PDF + HTML)?" — options "Yes — save PDF + HTML" (recommended) and "No — conversation only".
 
-**On yes:**
+**On yes** — save **both** a `.pdf` and an `.html` file (plus the `.md` source). Pick the basename `Competitor Claims Analysis <date>` once; if any file with that basename already exists (same-day rerun), suffix " (2)", " (3)", … and reuse that one suffix for all three files so they stay a matched set.
 1. `mkdir -p "Generated Analysis"`.
-2. Render the markdown to HTML with the converter in this skill's directory: `python3 "<this skill's directory>/md-to-html.py" "<report.md>" /tmp/claims-report.html`. It embeds A4 print CSS and keeps table header rows readable (bolded company names render white on the dark header row) — do not hand-roll HTML with CSS that hides them.
-3. Convert: `bash "<this skill's directory>/html-to-pdf.sh" /tmp/claims-report.html "Generated Analysis/Competitor Claims Analysis <date>.pdf"` — the script tries Chrome-family headless, then wkhtmltopdf, pandoc, and weasyprint. If the target filename already exists (same-day rerun), suffix " (2)", " (3)", ….
-4. Save the markdown source alongside with the same basename and `.md` — the next run's change-tracking depends on it. Delete the temp HTML on success.
-5. If every converter fails, save the `.html` and `.md` into `Generated Analysis/` instead and tell the user to open the HTML and use Print → Save as PDF.
+2. Render the markdown to HTML **directly into the output folder** with the converter in this skill's directory: `python3 "<this skill's directory>/md-to-html.py" "<report.md>" "Generated Analysis/<basename>.html"`. It embeds A4 print CSS and keeps table header rows readable (bolded company names render white on the dark header row) — do not hand-roll HTML with CSS that hides them.
+3. Convert that saved HTML to PDF in the same folder: `bash "<this skill's directory>/html-to-pdf.sh" "Generated Analysis/<basename>.html" "Generated Analysis/<basename>.pdf"` — the script tries Chrome-family headless, then wkhtmltopdf, pandoc, and weasyprint.
+4. Save the markdown source alongside as `Generated Analysis/<basename>.md` — the next run's change-tracking depends on it.
+5. **Keep the HTML** — it is a deliverable alongside the PDF, so never delete it. Then confirm to the user which files were written (`.pdf`, `.html`, `.md`). If every PDF converter fails, the `.html` and `.md` are still saved — tell the user the PDF could not be generated and to open the HTML and use Print → Save as PDF.
 
 **On no:** save nothing; the writeup stays in the conversation.
