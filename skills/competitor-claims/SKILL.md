@@ -23,7 +23,7 @@ To add or remove companies, edit this table — the workflow takes the roster as
 
 Heads-up: several names are ambiguous (Cogent Communications is an unrelated ISP; "Artemis" and "Kai" collide with unrelated products). The workflow agents are instructed to confirm they are looking at the AI cybersecurity company and to chase down the correct site if a listed domain doesn't match.
 
-Crawler blocking: Armadin (and potentially others) serves Cloudflare 403 to automated fetchers. Falling back to the most recent Internet Archive / Wayback Machine snapshot (web.archive.org) is acceptable — record the snapshot date in `site_status` and flag the staleness in the report appendix.
+Crawler blocking: Armadin (and potentially others) serves Cloudflare 403 to automated fetchers. Falling back to the most recent Internet Archive / Wayback Machine snapshot (web.archive.org) is acceptable — record the snapshot date in `site_status` and flag the staleness in the report appendix. When fetching from the Wayback Machine (Internet Archive, `web.archive.org`), use `curl` via the Bash tool rather than `WebFetch` — `WebFetch` is unreliable against archive.org's snapshot wrapper.
 
 ## Step 0 — setup
 
